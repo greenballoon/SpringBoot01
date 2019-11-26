@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jzcx.dao.CorpRedBlackDao">
+
+
+    <sql id="getCorpBlackInfo">
+        bid as id,
+        ENTNAME as corpName,
+        诚信分数 as mark,
+        统一社会信用代码 as corpCode,
+        结束时间 as endTime,
+        企业类型 as type,
+        原因 as reason,
+        BEGINDATE as beginTime
+    </sql>
+
+    <sql id="getCorpRedInfo">
+        bid as id,
+        ENTNAME as corpName,
+        MARK as mark,
+        CORP_CODE as corpCode,
+        LX as type
+
+    </sql>
+
+    <select id="getCorpBlackInfo" resultType="com.example.jzcx.entity.CorpRedBlackInfoEntity" parameterType="Map">
+
+        select
+        <include refid="getCorpBlackInfo"/>
+        from (
+        select rownum r,t.*
+        from view_get_blacklist t
+        <where>
+            <if test="corpName != null and corpName!=''">
+                <bind name="corpNameLike" value="'%' + corpName + '%'"/>
+                and ENTNAME like #{corpNameLike,jdbcType=VARCHAR}
+            </if>
+        </where>
+        )
+        <![CDATA[where r> (#{page,jdbcType=INTEGER}*#{limit,jdbcType=INTEGER}) and r < =((#{page,jdbcType=INTEGER}+1) * #{limit,jdbcType=INTEGER})]]>
+
+
+    </select>
+
+    <select id="getCorpRedInfo" resultType="com.example.jzcx.entity.CorpRedBlackInfoEntity" parameterType="Map">
+
+        select
+        <include refid="getCorpRedInfo"/>
+        from (
+        select rownum r,t.*
+        from view_get_redlist t
+        <where>
+            <if test="corpName != null and corpName!=''">
+                <bind name="corpNameLike" value="'%' + corpName + '%'"/>
+                and ENTNAME like #{corpNameLike,jdbcType=VARCHAR}
+            </if>
+        </where>
+        )
+        <![CDATA[where r> (#{page,jdbcType=INTEGER}*#{limit,jdbcType=INTEGER}) and r < =((#{page,jdbcType=INTEGER}+1) * #{limit,jdbcType=INTEGER})]]>
+    </select>
+
+    <select id="getRedCount" resultType="Long" parameterType="Map">
+        select
+          count(*)
+        from view_get_redlist t
+        <where>
+            <if test="corpName != null and corpName!=''">
+                <bind name="corpNameLike" value="'%' + corpName + '%'"/>
+                and ENTNAME like #{corpNameLike,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBlackCount" resultType="Long" parameterType="Map">
+        select
+        count(*)
+        from view_get_blacklist
+        <where>
+            <if test="corpName != null and corpName!=''">
+                <bind name="corpNameLike" value="'%' + corpName + '%'"/>
+                and ENTNAME like #{corpNameLike,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>

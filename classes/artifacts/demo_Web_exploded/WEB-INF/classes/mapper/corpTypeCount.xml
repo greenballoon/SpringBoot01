@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jzcx.dao.CorpTypeCountDao">
+
+
+    <sql id="getCorpTypeCount">
+      name,
+      value
+     /* 勘察类企业 as kanCha,
+      预拌商品混凝土企业 as yuBanShangPingHunNingTu,
+      招标代理机构 as zhaoBiaoDaiLi,
+      工程造价咨询企业 as gongChenZhaoJiaZhiXun,
+      预拌砂浆生产企业 as yuBanShaJiangShenChan,
+      建筑工程检测机构 as jianZhuGongChenJianChe,
+      设计施工一体化企业 as sheJiShiGongYiTiHua,
+      设计类企业 as sheJi,
+      施工图审查机构 as shiGongTuShenCha,
+      监理类企业 as jianLi,
+      深基坑第三方监测企业 as shenJiKengDiSanFangJianChe,
+      园林绿化企业 as yuanLinLvHua,
+      "建筑业企业" as jianZhu*/
+
+
+    </sql>
+
+    <select id="getCorpTypeCount" resultType="com.example.jzcx.entity.CorpTypeCountEntity" >
+        select
+        <include refid="getCorpTypeCount"/>
+        from sjcd.view_get_interprisekind@jzcx t
+    </select>
+
+
+</mapper>
